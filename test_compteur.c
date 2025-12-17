@@ -3,7 +3,6 @@
 #include <pthread.h>
 
 static int compteur_global = 0;
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void reset_compteur(void) {
     compteur_global = 0;
@@ -24,6 +23,7 @@ void* incrementeur_thread(void* arg) {
     return NULL;
 }
 
+
 int executer_test(int nb_threads, int nb_increments) {
     reset_compteur();
 
@@ -39,26 +39,7 @@ int executer_test(int nb_threads, int nb_increments) {
 
     int resultat = get_compteur();
 
-    // On a oublié le free
-    free(threads);
+    // Qu'est ce qui a été oublié ici ?
 
     return resultat;
-
-int main(void) {
-    printf("=== Compteur Sécurisé ===\n");
-        long long expected = INCREMENT*THREAD_COUNT;
-
-    pthread_t threads[THREAD_COUNT];
-
-    for (int i = 0; i < THREAD_COUNT; i++)
-        pthread_create(&threads[i], NULL, incrementeur_thread, NULL);
-
-    for (int i = 0; i < THREAD_COUNT; i++)
-        pthread_join(threads[i], NULL);
-
-    printf("Valeur attendue : %ld\n", expected);
-    printf("Résultat final : %ld\n", compteur_global);
-    printf("Différence : %ld\n", expected - compteur_global);
-
-    return 0;
 }

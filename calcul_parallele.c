@@ -5,7 +5,7 @@
 
 
 #define TAILLE_DONNEES 10
-#define MULTIPLICATEUR 1000
+#define MULTIPLICATEUR 600000
 
 static const int DONNEES[TAILLE_DONNEES] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
