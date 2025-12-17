@@ -13,14 +13,20 @@ typedef struct {
     int valeur;
     int multiplicateur;
     int index;
-    int64_t somme_total;
+    int64_t resultat;
 } args_t;
 
 void* calcul_thread(void* arg) {
+    
         // cette fonction est appelé via pthread_create
         // vous savez ce que représente @arg
         // vous notifié au compilateur "cette" address dois être considéré comme args_t
     args_t* args = (args_t*)arg;
+    for(int j = 0; j < MULTIPLICATEUR; j++)
+    {
+        args->resultat+= args->valeur * args->valeur;
+        usleep(20);
+    }
         // vous pouvez accéder (read/write) a toutes les variables via `args->`
     return NULL;
 }
@@ -38,18 +44,25 @@ int main(void) {
     // TODO: Créer un tableau de structures d'arguments
     args_t args[TAILLE_DONNEES];
     // TODO: Créer et démarrer tous les threads
-    or(int i = 0; i < TAILLE_DONNES; i++)
+    for(int i = 0; i < TAILLE_DONNEES; i++)
     {
-        pthread_create(thread[i],NULL); 
+        args[i].valeur = DONNEES[i];
+        //args[i].multiplicateur = MULTIPLICATEUR;
+        //args[i].index = i;
+        args[i].resultat = 0;
+        pthread_create(&threads[i], NULL, calcul_thread, &args[i]);
     }
-        // TODO : Créer tous les threads
+
     // TODO: Attendre tous les threads
-    for(int i = 0; i < TAILLE_DONNES; i++)
+    for(int i = 0; i < TAILLE_DONNEES; i++)
     {
         pthread_join(threads[i], NULL); 
+        // TODO: Agréger les résultats
+
+        somme_total += args[i].resultat;
     }
-    // TODO: Agréger les résultats
-    args_t* += somme_total;
+
+    
 
     clock_gettime(CLOCK_MONOTONIC, &fin);
     long duree = (fin.tv_sec - debut.tv_sec) * 1000 + (fin.tv_nsec - debut.tv_nsec) / 1000000;
