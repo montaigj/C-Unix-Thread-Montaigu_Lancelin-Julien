@@ -7,10 +7,21 @@
 
 static long long compteur_global = 0;  // Variable partagée MODIFIABLE et MODIFIÉ
 
+void reset_compteur(void) {
+    compteur_global = 0;
+}
+
+int get_compteur(void) {
+    return compteur_global;
+}
+
 void* incrementeur_thread(void* arg) {
     for (int i = 0; i < INCREMENT; i++) {
         // TODO: Expliquer pourquoi, dans le détail, cette ligne qui pose problème
-        compteur_global++;  // RACE CONDITION ICI !
+        // Elle va poser probleme car il y a un probleme de race condition avec l'idée de LOAD ADD et STORE 
+        // Dans la plupart des cas, ca ne va pas poser probleme, mais il  y aura forcément un cas ou on va lancer le code, et les 2 variables vont être crées   
+        //en même temps et le processeur ne saura pas quoi faire ( BUG DE CONCCURRENCE ET NON DETERMINISME )
+        compteur_global++;  /
     }
     return NULL;
 }
